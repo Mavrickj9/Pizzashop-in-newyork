@@ -1,0 +1,29 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.btn {
+  padding: 10px 5px;
+  border-radius: 5px;
+  border: none;
+  margin-top: 0;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: uppercase;
+  background-color: #080b67;
+  color: rgba(255, 255, 255, 0.853);
+  cursor: pointer;
+}
