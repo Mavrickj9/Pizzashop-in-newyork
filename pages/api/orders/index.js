@@ -11,6 +11,7 @@ const handler = async (req, res) => {
       const orders = await Order.find();
       res.status(200).json(orders);
     } catch (err) {
+      console.log(err.response);
       res.status(500).json(err);
     }
   }
@@ -19,6 +20,7 @@ const handler = async (req, res) => {
       const order = await Order.create(req.body);
       res.status(201).json(order);
     } catch (err) {
+      console.log(err.response);
       res.status(500).json(err);
     }
   }

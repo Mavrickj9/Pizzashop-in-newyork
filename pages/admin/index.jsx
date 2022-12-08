@@ -16,7 +16,7 @@ const Index = ({ orders, products }) => {
       );
       setPizzaList(pizzaList.filter((pizza) => pizza._id !== id));
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
   };
 
@@ -33,7 +33,7 @@ const Index = ({ orders, products }) => {
         ...orderList.filter((order) => order._id !== id),
       ]);
     } catch (err) {
-      console.log(err);
+      console.log(err.response);
     }
   };
 
