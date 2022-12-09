@@ -16,6 +16,7 @@ export default async function handler(req, res) {
       const product = await Product.findById(id);
       res.status(200).json(product);
     } catch (err) {
+      console.log(err.response);
       res.status(500).json(err);
     }
   }
@@ -30,6 +31,7 @@ export default async function handler(req, res) {
       });
       res.status(200).json(product);
     } catch (err) {
+      console.log(err.response);
       res.status(500).json(err);
     }
   }
@@ -42,6 +44,7 @@ export default async function handler(req, res) {
       await Product.findByIdAndDelete(id);
       res.status(200).json("The product has been deleted!");
     } catch (err) {
+      console.log(err.response);
       res.status(500).json(err);
     }
   }
