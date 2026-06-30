@@ -113,8 +113,11 @@ const Order = ({ order }) => {
   );
 };
 
-export const getServerSideProps = async ({ params }) => {
-  const res = await axios.get(`http://localhost:3000/api/orders/${params.id}`);
+export const getServerSideProps = async ({ params, req }) => {
+  const protocol = req.headers["x-forwarded-proto"] || "http";
+  const baseUrl = `${protocol}://${req.headers.host}`;
+
+  const res = await axios.get(`${baseUrl}/api/orders/${params.id}`);
   return {
     props: { order: res.data },
   };

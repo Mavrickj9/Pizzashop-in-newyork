@@ -95,9 +95,12 @@ const Product = ({ pizza }) => {
   );
 };
 
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps = async ({ params, req }) => {
+  const protocol = req.headers["x-forwarded-proto"] || "http";
+  const baseUrl = `${protocol}://${req.headers.host}`;
+
   const res = await axios.get(
-    `http://localhost:3000/api/products/${params.id}`
+    `${baseUrl}/api/products/${params.id}`
   );
   return {
     props: {

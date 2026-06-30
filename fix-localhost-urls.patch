@@ -1,0 +1,128 @@
+diff --git a/components/Add.jsx b/components/Add.jsx
+index 3159e3a..f2ac5d1 100644
+--- a/components/Add.jsx
++++ b/components/Add.jsx
+@@ -44,7 +44,7 @@ const Add = ({ setClose }) => {
+         img: url,
+       };
+ 
+-      await axios.post("http://localhost:3000/api/products", newProduct);
++      await axios.post("/api/products", newProduct);
+       setClose(true);
+     } catch (err) {
+       console.log(err.response);
+diff --git a/pages/admin/index.jsx b/pages/admin/index.jsx
+index 063dbcb..6bd9e18 100644
+--- a/pages/admin/index.jsx
++++ b/pages/admin/index.jsx
+@@ -12,7 +12,7 @@ const Index = ({ orders, products }) => {
+     console.log(id);
+     try {
+       const res = await axios.delete(
+-        "http://localhost:3000/api/products/" + id
++        "/api/products/" + id
+       );
+       setPizzaList(pizzaList.filter((pizza) => pizza._id !== id));
+     } catch (err) {
+@@ -25,7 +25,7 @@ const Index = ({ orders, products }) => {
+     const currentStatus = item.status;
+ 
+     try {
+-      const res = await axios.put("http://localhost:3000/api/orders/" + id, {
++      const res = await axios.put("/api/orders/" + id, {
+         status: currentStatus + 1,
+       });
+       setOrderList([
+@@ -129,8 +129,11 @@ export const getServerSideProps = async (ctx) => {
+     };
+   }
+ 
+-  const productRes = await axios.get("http://localhost:3000/api/products");
+-  const orderRes = await axios.get("http://localhost:3000/api/orders");
++  const protocol = ctx.req.headers["x-forwarded-proto"] || "http";
++  const baseUrl = `${protocol}://${ctx.req.headers.host}`;
++
++  const productRes = await axios.get(`${baseUrl}/api/products`);
++  const orderRes = await axios.get(`${baseUrl}/api/orders`);
+ 
+   return {
+     props: {
+diff --git a/pages/admin/login.jsx b/pages/admin/login.jsx
+index 8315565..d0b840a 100644
+--- a/pages/admin/login.jsx
++++ b/pages/admin/login.jsx
+@@ -11,7 +11,7 @@ const Login = () => {
+ 
+   const handleClick = async () => {
+     try {
+-      await axios.post("http://localhost:3000/api/login", {
++      await axios.post("/api/login", {
+         username,
+         password,
+       });
+diff --git a/pages/cart.jsx b/pages/cart.jsx
+index 645083a..2bbf562 100644
+--- a/pages/cart.jsx
++++ b/pages/cart.jsx
+@@ -25,7 +25,7 @@ const Cart = () => {
+ 
+   const createOrder = async (data) => {
+     try {
+-      const res = await axios.post("http://localhost:3000/api/orders", data);
++      const res = await axios.post("/api/orders", data);
+       if (res.status === 201) {
+         dispatch(reset());
+         router.push(`/orders/${res.data._id}`);
+diff --git a/pages/index.js b/pages/index.js
+index f34db89..4b7d43f 100644
+--- a/pages/index.js
++++ b/pages/index.js
+@@ -32,7 +32,10 @@ export const getServerSideProps = async (ctx) => {
+     admin = true;
+   }
+ 
+-  const res = await axios.get("http://localhost:3000/api/products");
++  const protocol = ctx.req.headers["x-forwarded-proto"] || "http";
++  const baseUrl = `${protocol}://${ctx.req.headers.host}`;
++
++  const res = await axios.get(`${baseUrl}/api/products`);
+   return {
+     props: {
+       pizzaList: res.data,
+diff --git a/pages/orders/[id].jsx b/pages/orders/[id].jsx
+index 984cae9..525b56d 100644
+--- a/pages/orders/[id].jsx
++++ b/pages/orders/[id].jsx
+@@ -113,8 +113,11 @@ const Order = ({ order }) => {
+   );
+ };
+ 
+-export const getServerSideProps = async ({ params }) => {
+-  const res = await axios.get(`http://localhost:3000/api/orders/${params.id}`);
++export const getServerSideProps = async ({ params, req }) => {
++  const protocol = req.headers["x-forwarded-proto"] || "http";
++  const baseUrl = `${protocol}://${req.headers.host}`;
++
++  const res = await axios.get(`${baseUrl}/api/orders/${params.id}`);
+   return {
+     props: { order: res.data },
+   };
+diff --git a/pages/product/[id].jsx b/pages/product/[id].jsx
+index 8206480..c360026 100644
+--- a/pages/product/[id].jsx
++++ b/pages/product/[id].jsx
+@@ -95,9 +95,12 @@ const Product = ({ pizza }) => {
+   );
+ };
+ 
+-export const getServerSideProps = async ({ params }) => {
++export const getServerSideProps = async ({ params, req }) => {
++  const protocol = req.headers["x-forwarded-proto"] || "http";
++  const baseUrl = `${protocol}://${req.headers.host}`;
++
+   const res = await axios.get(
+-    `http://localhost:3000/api/products/${params.id}`
++    `${baseUrl}/api/products/${params.id}`
+   );
+   return {
+     props: {

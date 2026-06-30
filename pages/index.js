@@ -32,7 +32,10 @@ export const getServerSideProps = async (ctx) => {
     admin = true;
   }
 
-  const res = await axios.get("http://localhost:3000/api/products");
+  const protocol = ctx.req.headers["x-forwarded-proto"] || "http";
+  const baseUrl = `${protocol}://${ctx.req.headers.host}`;
+
+  const res = await axios.get(`${baseUrl}/api/products`);
   return {
     props: {
       pizzaList: res.data,
